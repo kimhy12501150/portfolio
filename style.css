@@ -1,0 +1,42 @@
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff8f0;
+  color: #333;
+}
+.sunrise-header {
+  background: linear-gradient(to top, #ffecd2 0%, #fcb69f 100%);
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+}
+.sunrise-header h1 {
+  font-size: 3rem;
+  margin: 0.5em 0 0.2em;
+}
+.sunrise-header p {
+  font-size: 1.2rem;
+}
+.cloud-bg {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  opacity: 0.3;
+}
+header, main, footer {
+  position: relative;
+  z-index: 1;
+}
+main {
+  padding: 20px;
+}
+footer {
+  text-align: center;
+  padding: 10px;
+  background: #fddcc4;
+}
