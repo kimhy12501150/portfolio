@@ -1,114 +1,386 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <title>김혜미 포트폴리오</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="assets/css/main.css" />
-  <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김혜미의 포트폴리오</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Pretendard', sans-serif;
+      color: #2c3e50;
+      background: #0f172a;
+      overflow-x: hidden;
+      height: 100vh;
+    }
+    
+    .main-container {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+    
+    /* Left Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+      color: white;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .profile {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+    
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .profile h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-weight: 700;
+    }
+    
+    .profile .title {
+      text-align: center;
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .profile .bio {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      opacity: 0.9;
+      text-align: center;
+    }
+    
+    .email-footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .email-footer a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    
+    .email-footer a:hover {
+      color: #60a5fa;
+    }
+    
+    /* Right Content Area */
+    .content {
+      padding: 3rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    /* Skills Section */
+    .skills-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .skills-section h2 {
+      color: #60a5fa;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    
+    .skill-card {
+      background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      transition: all 0.3s;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+    }
+    
+    .skill-card .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skill-card .name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Projects Section */
+    .projects-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .projects-section h2 {
+      color: #60a5fa;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .project-card {
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.5) 0%, rgba(30, 58, 138, 0.5) 100%);
+    }
+    
+    .project-card h3 {
+      color: #60a5fa;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .project-card p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    
+    .project-status {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(96, 165, 250, 0.5);
+    }
+    
+    /* Scrollbar */
+    .content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .content::-webkit-scrollbar-thumb {
+      background: rgba(96, 165, 250, 0.5);
+      border-radius: 4px;
+    }
+    
+    .content::-webkit-scrollbar-thumb:hover {
+      background: rgba(96, 165, 250, 0.7);
+    }
+    
+    /* Responsive */
+    @media (max-width: 968px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      
+      .sidebar {
+        padding: 2rem;
+      }
+      
+      .profile-image {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+      }
+      
+      .content {
+        padding: 2rem;
+        height: auto;
+      }
+      
+      .skills-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="is-preload">
-
-  <!-- Wrapper -->
-  <div id="wrapper">
-
-    <!-- Header -->
-    <header id="header" class="alt">
-      <span class="logo"><img src="images/logo.svg" alt="" /></span>
-      <h1>김혜미 포트폴리오</h1>
-      <p>HTML, CSS, JavaScript를 활용한 웹 프론트엔드 개발자 지망생의 포트폴리오입니다.</p>
-    </header>
-
-    <!-- Nav -->
-    <nav id="nav">
-      <ul>
-        <li><a href="#about" class="active">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-
-    <!-- Main -->
-    <div id="main">
-
-      <!-- About -->
-      <section id="about" class="main">
-        <header class="major">
-          <h2>About Me</h2>
-        </header>
-        <p>안녕하세요! 저는 웹 개발의 세계에 첫 발을 내딘 김혜미입니다. <br>
-          HTML, CSS, JavaScript를 중심으로 한 웹 프론트엔드 기술을 배우고 있으며, 디자인 감각과 사용자 중심의 UI/UX에 대한 이해를 키워가고 있습니다.
+<body>
+  <div class="main-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="profile-image">
+          <img src="images/profile.jpg" alt="김혜미 프로필 사진">
+        </div>
+        <h1>김혜미</h1>
+        <p class="title">AI & Web Developer</p>
+        <p class="bio">
+          AI와 웹 개발의 세계를 탐험하는 개발자
         </p>
+      </div>
+      
+      <div class="email-footer">
+        <a href="mailto:12501150@iscu.ac.kr">📧 12501150@iscu.ac.kr</a>
+      </div>
+    </aside>
+    
+    <!-- Right Content -->
+    <main class="content">
+      <!-- Skills Section -->
+      <section class="skills-section">
+        <h2>🛠️ Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="icon">🤖</div>
+            <div class="name">머신러닝</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">💻</div>
+            <div class="name">프론트엔드</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">📊</div>
+            <div class="name">데이터 시각화</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">🐍</div>
+            <div class="name">Python</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">⚡</div>
+            <div class="name">JavaScript</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">🎨</div>
+            <div class="name">UI/UX</div>
+          </div>
+        </div>
       </section>
-
-      <!-- Skills -->
-      <section id="skills" class="main special">
-        <header class="major">
-          <h2>Skills</h2>
-        </header>
-        <ul class="features">
-          <li>
-            <h3>HTML5, CSS3</h3>
-          </li>
-          <li>
-            <h3>JavaScript (ES6+)</h3>
-          </li>
-          <li>
-            <h3>Git / GitHub</h3>
-          </li>
-          <li>
-            <h3>Visual Studio Code</h3>
-          </li>
-          <li>
-            <h3>Figma (기초 디자인 툴 활용)</h3>
-          </li>
-        </ul>
+      
+      <!-- Projects Section -->
+      <section class="projects-section">
+        <h2>💡 Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <h3>머신러닝 분석 프로젝트</h3>
+            <p>실제 데이터를 기반으로 한 예측 모델 구축 프로젝트입니다. 데이터 전처리부터 모델 학습까지 전 과정을 다룹니다.</p>
+            <span class="project-status">준비 중</span>
+          </div>
+          <div class="project-card">
+            <h3>웹 애플리케이션</h3>
+            <p>인터랙티브한 사용자 경험을 제공하는 웹 애플리케이션 개발 프로젝트입니다. 최신 웹 기술을 활용합니다.</p>
+            <span class="project-status">준비 중</span>
+          </div>
+          <div class="project-card">
+            <h3>데이터 시각화 대시보드</h3>
+            <p>복잡한 데이터를 직관적으로 이해할 수 있는 시각화 대시보드를 제작합니다.</p>
+            <span class="project-status">준비 중</span>
+          </div>
+        </div>
       </section>
-
-      <!-- Projects -->
-      <section id="projects" class="main">
-        <header class="major">
-          <h2>Projects</h2>
-        </header>
-        <ul>
-          <li>
-            <strong>개인 포트폴리오 웹사이트 제작</strong><br>
-            GitHub Pages를 활용해 직접 웹페이지를 제작하고 배포했습니다. Solid State 테마를 기반으로 한 정적 포트폴리오입니다.
-          </li>
-          <li>
-            <strong>미니 캘린더 앱 (HTML/CSS/JS)</strong><br>
-            기초 자바스크립트를 활용하여 월별 달력 기능과 메모 기능이 있는 웹 앱을 개발했습니다.
-          </li>
-        </ul>
-      </section>
-
-      <!-- Contact -->
-      <section id="contact" class="main special">
-        <header class="major">
-          <h2>Contact</h2>
-          <p>12501150@iscu.ac.kr</p>
-        </header>
-      </section>
-
-    </div>
-
-    <!-- Footer -->
-    <footer id="footer">
-      <section>
-        <p>&copy; 김혜미 포트폴리오. All rights reserved.</p>
-      </section>
-    </footer>
-
+    </main>
   </div>
-
-  <!-- Scripts -->
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/jquery.scrollex.min.js"></script>
-  <script src="assets/js/browser.min.js"></script>
-  <script src="assets/js/breakpoints.min.js"></script>
-  <script src="assets/js/util.js"></script>
-  <script src="assets/js/main.js"></script>
-
 </body>
 </html>
