@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김혜미의 포트폴리오</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Pretendard', sans-serif;
+      color: #2c3e50;
+      background: #0f172a;
+      overflow-x: hidden;
+      height: 100vh;
+    }
+    
+    .main-container {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+    
+    /* Left Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+      color: white;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .profile {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+    
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .profile h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-weight: 700;
+    }
+    
+    .profile .title {
+      text-align: center;
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .profile .bio {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      opacity: 0.9;
+      text-align: center;
+    }
+    
+    .email-footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .email-footer a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    
+    .email-footer a:hover {
+      color: #60a5fa;
+    }
+    
+    /* Right Content Area */
+    .content {
+      padding: 3rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    /* Skills Section */
+    .skills-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .skills-section h2 {
+      color: #60a5fa;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    
+    .skill-card {
+      background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      transition: all 0.3s;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+    }
+    
+    .skill-card .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skill-card .name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Projects Section */
+    .projects-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .projects-section h2 {
+      color: #60a5fa;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .project-card {
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.5) 0%, rgba(30, 58, 138, 0.5) 100%);
+    }
+    
+    .project-card h3 {
+      color: #60a5fa;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .project-card p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    
+    .project-status {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(96, 165, 250, 0.5);
+    }
+    
+    /* Scrollbar */
+    .content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .content::-webkit-scrollbar-thumb {
+      background: rgba(96, 165, 250, 0.5);
+      border-radius: 4px;
+    }
+    
+    .content::-webkit-scrollbar-thumb:hover {
+      background: rgba(96, 165, 250, 0.7);
+    }
+    
+    /* Responsive */
+    @media (max-width: 968px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      
+      .sidebar {
+        padding: 2rem;
+      }
+      
+      .profile-image {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+      }
+      
+      .content {
+        padding: 2rem;
+        height: auto;
+      }
+      
+      .skills-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="profile-image">
+          <img src="images/profile.jpg" alt="김혜미 프로필 사진">
+        </div>
+        <h1>김혜미</h1>
+        <p class="title">AI & Web Developer</p>
+        <p class="bio">
+          AI와 웹 개발의 세계를 탐험하는 개발자
+        </p>
+      </div>
+      
+      <div class="email-footer">
+        <a href="mailto:12501150@iscu.ac.kr">📧 12501150@iscu.ac.kr</a>
+      </div>
+    </aside>
+    
+    <!-- Right Content -->
+    <main class="content">
+      <!-- Skills Section -->
+      <section class="skills-section">
+        <h2>🎓 관심 분야</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="icon">🤖</div>
+            <div class="name">인공지능</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">💻</div>
+            <div class="name">웹 개발</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">📊</div>
+            <div class="name">데이터 분석</div>
+          </div>
+          <div class="skill-card">
+            <div class="icon">🐍</div>
+            <div class="name">Python</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Projects Section -->
+      <section class="projects-section">
+        <h2>💡 학습 계획</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <h3>AI 기초 학습</h3>
+            <p>머신러닝과 딥러닝의 기본 개념을 학습하고, 간단한 모델을 직접 구현해보는 것을 목표로 하고 있습니다.</p>
+            <span class="project-status">학습 중</span>
+          </div>
+          <div class="project-card">
+            <h3>웹 개발 실습</h3>
+            <p>HTML, CSS, JavaScript를 활용한 웹 페이지 제작을 학습하며, 실용적인 프로젝트 경험을 쌓아가고 있습니다.</p>
+            <span class="project-status">학습 중</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
