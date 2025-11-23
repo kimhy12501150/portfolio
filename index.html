@@ -61,6 +61,24 @@
       color: #2563eb;
     }
     
+    body.light-mode .modal-content {
+      background: white;
+      color: #1e293b;
+    }
+    
+    body.light-mode .modal-content h2 {
+      color: #2563eb;
+    }
+    
+    body.light-mode .detail-item h4 {
+      color: #2563eb;
+    }
+    
+    body.light-mode .close-btn {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+    }
+    
     .main-container {
       height: 100vh;
       display: grid;
@@ -233,6 +251,26 @@
       color: white;
       transition: all 0.3s;
       border: 1px solid rgba(96, 165, 250, 0.3);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .skill-card::after {
+      content: '클릭하여 자세히 보기';
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      right: 0;
+      background: rgba(59, 130, 246, 0.9);
+      color: white;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      transition: bottom 0.3s;
+    }
+    
+    .skill-card:hover::after {
+      bottom: 0;
     }
     
     .skill-card:hover {
@@ -326,6 +364,196 @@
       border: 1px solid rgba(96, 165, 250, 0.5);
     }
     
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-radius: 25px;
+      padding: 3rem;
+      max-width: 700px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      border: 2px solid rgba(96, 165, 250, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.4s ease;
+      color: white;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+      color: white;
+    }
+    
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    .modal-icon {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    }
+    
+    .modal-header h2 {
+      color: #60a5fa;
+      font-size: 2rem;
+      margin: 0;
+    }
+    
+    .modal-body {
+      line-height: 1.8;
+    }
+    
+    .modal-body p {
+      color: #cbd5e1;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    
+    .detail-section {
+      margin-top: 2rem;
+    }
+    
+    .detail-section h3 {
+      color: #60a5fa;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .detail-item {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid #3b82f6;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .detail-item:hover {
+      background: rgba(59, 130, 246, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .detail-item h4 {
+      color: #60a5fa;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .detail-item p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .tag {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    /* Scrollbar for modal */
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(96, 165, 250, 0.5);
+      border-radius: 4px;
+    }
+    
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(96, 165, 250, 0.7);
+    }
+    
     /* Scrollbar */
     .content::-webkit-scrollbar {
       width: 8px;
@@ -373,6 +601,21 @@
       .projects-grid {
         grid-template-columns: 1fr;
       }
+      
+      .modal-content {
+        padding: 2rem;
+        margin: 1rem;
+      }
+      
+      .modal-header h2 {
+        font-size: 1.5rem;
+      }
+      
+      .modal-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -406,19 +649,19 @@
       <section class="skills-section">
         <h2>🎓 관심 분야</h2>
         <div class="skills-grid">
-          <div class="skill-card">
+          <div class="skill-card" data-skill="ai">
             <div class="icon">🤖</div>
             <div class="name">인공지능</div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-skill="web">
             <div class="icon">💻</div>
             <div class="name">웹 개발</div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-skill="data">
             <div class="icon">📊</div>
             <div class="name">데이터 분석</div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-skill="python">
             <div class="icon">🐍</div>
             <div class="name">Python</div>
           </div>
@@ -431,12 +674,12 @@
         <div class="projects-grid">
           <div class="project-card">
             <h3>AI 기초 학습</h3>
-            <p>머신러닝과 딥러닝의 기본 개념을 학습하고, 간단한 모델을 직접 구현해보는 것을 목표로 하고 있습니다.</p>
+            <p>ChatGPT가 어떻게 작동하는지 궁금해서 AI 공부를 시작했어요. Google Teachable Machine으로 이미지 분류 AI를 처음 만들어봤습니다!</p>
             <span class="project-status">학습 중</span>
           </div>
           <div class="project-card">
             <h3>웹 개발 실습</h3>
-            <p>HTML, CSS, JavaScript를 활용한 웹 페이지 제작을 학습하며, 실용적인 프로젝트 경험을 쌓아가고 있습니다.</p>
+            <p>유튜브 따라하기로 첫 웹페이지를 만들었어요. 내가 좋아하는 것들을 소개하는 페이지를 직접 디자인하고 있습니다!</p>
             <span class="project-status">학습 중</span>
           </div>
         </div>
@@ -444,9 +687,126 @@
     </main>
   </div>
   
+  <!-- Modal -->
+  <div class="modal" id="skillModal">
+    <div class="modal-content">
+      <div class="close-btn" id="closeModal">✕</div>
+      <div class="modal-header">
+        <div class="modal-icon" id="modalIcon">🤖</div>
+        <h2 id="modalTitle">인공지능</h2>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Content will be inserted by JavaScript -->
+      </div>
+    </div>
+  </div>
+  
   <script>
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
+    const modal = document.getElementById('skillModal');
+    const closeModal = document.getElementById('closeModal');
+    const skillCards = document.querySelectorAll('.skill-card');
+    
+    // Modal data
+    const skillData = {
+      ai: {
+        icon: '🤖',
+        title: '인공지능',
+        description: '인공지능은 제가 가장 흥미롭게 생각하는 분야입니다. ChatGPT처럼 사람과 대화하는 AI를 직접 만들어보고 싶어요!',
+        sections: [
+          {
+            title: '💡 관심 영역',
+            items: [
+              { title: '챗봇 만들기', desc: '간단한 대화형 챗봇을 만들어보고 싶습니다. 질문에 답하는 AI부터 시작할 거예요.' },
+              { title: '이미지 인식', desc: '사진 속 물체를 알아보는 AI가 신기해요. 고양이와 강아지를 구분하는 프로그램을 만들어볼 계획입니다.' },
+              { title: 'AI 활용법', desc: 'ChatGPT, Gemini 같은 AI 도구를 공부와 프로젝트에 효과적으로 활용하는 방법을 배우고 있어요.' }
+            ]
+          },
+          {
+            title: '📚 학습 계획',
+            items: [
+              { title: 'AI 기초 개념', desc: 'AI가 어떻게 학습하는지 기본 원리를 이해하려고 노력 중입니다.' },
+              { title: '간단한 실습', desc: '구글 Colab에서 예제 코드를 따라해보며 AI를 직접 체험하고 있어요.' },
+              { title: '최신 AI 뉴스', desc: '최신 AI 뉴스와 기술 트렌드를 읽으며 업계 동향을 파악하고 있습니다.' }
+            ]
+          }
+        ],
+        tags: ['ChatGPT', 'Google Colab', '머신러닝 기초', 'AI 활용', '이미지 인식']
+      },
+      web: {
+        icon: '💻',
+        title: '웹 개발',
+        description: '멋진 웹사이트를 직접 만들 수 있다는 게 정말 신기해요. 제 아이디어를 웹으로 구현해보고 싶습니다!',
+        sections: [
+          {
+            title: '🎨 프론트엔드',
+            items: [
+              { title: 'HTML/CSS', desc: '웹페이지의 뼈대와 디자인을 만드는 기본 언어를 배우고 있어요. 버튼 색상 바꾸는 것도 재밌어요!' },
+              { title: 'JavaScript', desc: '웹페이지에 움직임을 주는 방법을 배우고 있습니다. 클릭하면 반응하는 기능 만들기가 목표예요.' },
+              { title: '반응형 디자인', desc: '컴퓨터와 핸드폰에서 모두 예쁘게 보이는 웹사이트를 만들고 싶어요.' }
+            ]
+          },
+          {
+            title: '🔧 만들고 싶은 것',
+            items: [
+              { title: '나만의 웹사이트', desc: '자기소개 페이지나 포트폴리오 사이트를 직접 만들어볼 거예요.' },
+              { title: '간단한 계산기', desc: 'JavaScript로 작동하는 계산기나 할 일 목록 앱을 만들어보고 싶어요.' },
+              { title: '예쁜 애니메이션', desc: '버튼에 호버 효과나 페이지 전환 애니메이션을 넣어보고 싶습니다.' }
+            ]
+          }
+        ],
+        tags: ['HTML', 'CSS', 'JavaScript', '반응형', '포트폴리오', 'CodePen']
+      },
+      data: {
+        icon: '📊',
+        title: '데이터 분석',
+        description: '숫자와 그래프로 이야기를 찾아내는 게 재미있어요. 데이터에서 재미있는 패턴을 발견하는 탐정이 되고 싶습니다!',
+        sections: [
+          {
+            title: '📈 분석 기술',
+            items: [
+              { title: '엑셀 활용', desc: '엑셀로 데이터를 정리하고 간단한 그래프를 그리는 연습을 하고 있어요.' },
+              { title: '그래프 그리기', desc: 'Python으로 막대 그래프, 원 그래프 같은 시각화를 만들어보고 있습니다.' },
+              { title: '데이터 찾기', desc: '공공데이터 포털에서 재미있는 데이터를 찾아 분석해보고 싶어요.' }
+            ]
+          },
+          {
+            title: '🛠️ 도구 및 라이브러리',
+            items: [
+              { title: 'Pandas 기초', desc: '표 형태의 데이터를 다루는 방법을 배우고 있어요. 엑셀의 Python 버전 같아요!' },
+              { title: '간단한 통계', desc: '평균, 최대값, 최소값 같은 기본 통계를 계산하는 법을 익히고 있습니다.' },
+              { title: 'Google Colab', desc: '설치 없이 웹에서 Python 코드를 실행할 수 있어서 편리해요.' }
+            ]
+          }
+        ],
+        tags: ['Python 기초', 'Pandas', '그래프', '엑셀', 'Google Colab', '공공데이터']
+      },
+      python: {
+        icon: '🐍',
+        title: 'Python',
+        description: 'Python은 배우기 쉽고 다양하게 활용할 수 있어서 좋아요. 제 첫 프로그래밍 언어로 선택했습니다!',
+        sections: [
+          {
+            title: '🎯 학습 내용',
+            items: [
+              { title: '기본 문법', desc: '변수, if문, for문 같은 기초부터 차근차근 배우고 있어요.' },
+              { title: '간단한 프로그램', desc: '계산기, 숫자 맞추기 게임 같은 재미있는 프로그램을 만들어봤어요.' },
+              { title: '함수 만들기', desc: '반복되는 코드를 함수로 만들어 재사용하는 방법을 익히고 있습니다.' }
+            ]
+          },
+          {
+            title: '📦 활용 분야',
+            items: [
+              { title: '간단한 자동화', desc: '파일 이름 한 번에 바꾸기, 반복 작업 자동화 같은 유용한 기능을 만들어볼 거예요.' },
+              { title: '데이터 다루기', desc: '엑셀 파일을 Python으로 읽고 간단한 계산을 해보고 있어요.' },
+              { title: 'AI 실습', desc: 'Python으로 간단한 AI 모델을 실행해보는 것이 목표입니다.' }
+            ]
+          }
+        ],
+        tags: ['Python 기초', '변수', '반복문', '함수', 'VS Code', 'Replit']
+      }
+    };
     
     // 저장된 테마 불러오기
     const savedTheme = localStorage.getItem('theme');
@@ -467,6 +827,68 @@
       } else {
         themeToggle.textContent = '☀️';
         localStorage.setItem('theme', 'dark');
+      }
+    });
+    
+    // Skill card click event
+    skillCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const skillType = card.getAttribute('data-skill');
+        const data = skillData[skillType];
+        
+        // Update modal content
+        document.getElementById('modalIcon').textContent = data.icon;
+        document.getElementById('modalTitle').textContent = data.title;
+        
+        let bodyHTML = `<p>${data.description}</p>`;
+        
+        data.sections.forEach(section => {
+          bodyHTML += `
+            <div class="detail-section">
+              <h3>${section.title}</h3>
+          `;
+          
+          section.items.forEach(item => {
+            bodyHTML += `
+              <div class="detail-item">
+                <h4>${item.title}</h4>
+                <p>${item.desc}</p>
+              </div>
+            `;
+          });
+          
+          bodyHTML += `</div>`;
+        });
+        
+        bodyHTML += `<div class="tags">`;
+        data.tags.forEach(tag => {
+          bodyHTML += `<span class="tag">${tag}</span>`;
+        });
+        bodyHTML += `</div>`;
+        
+        document.getElementById('modalBody').innerHTML = bodyHTML;
+        
+        // Show modal
+        modal.classList.add('active');
+      });
+    });
+    
+    // Close modal
+    closeModal.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+    
+    // Close modal with ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
       }
     });
   </script>
