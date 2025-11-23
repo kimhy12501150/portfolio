@@ -35,8 +35,9 @@
     
     body.light-mode .skills-section,
     body.light-mode .projects-section {
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.9);
       border-color: rgba(59, 130, 246, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
     
     body.light-mode .skill-card {
@@ -44,21 +45,25 @@
     }
     
     body.light-mode .project-card {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border-color: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
     
     body.light-mode .project-card h3 {
-      color: #2563eb;
+      color: #1e40af;
+      font-weight: 700;
     }
     
     body.light-mode .project-card p {
-      color: #475569;
+      color: #1e293b;
+      font-weight: 500;
     }
     
     body.light-mode .skills-section h2,
     body.light-mode .projects-section h2 {
-      color: #2563eb;
+      color: #1e40af;
+      font-weight: 700;
     }
     
     body.light-mode .modal-content {
@@ -67,11 +72,18 @@
     }
     
     body.light-mode .modal-content h2 {
-      color: #2563eb;
+      color: #1e40af;
+      font-weight: 700;
+    }
+    
+    body.light-mode .detail-section h3 {
+      color: #1e40af;
+      font-weight: 700;
     }
     
     body.light-mode .detail-item h4 {
-      color: #2563eb;
+      color: #1e40af;
+      font-weight: 600;
     }
     
     body.light-mode .close-btn {
@@ -499,6 +511,11 @@
       font-size: 1rem;
     }
     
+    body.light-mode .modal-body p {
+      color: #000000;
+      font-weight: 600;
+    }
+    
     .detail-section {
       margin-top: 2rem;
     }
@@ -536,6 +553,11 @@
       color: #cbd5e1;
       font-size: 0.95rem;
       margin: 0;
+    }
+    
+    body.light-mode .detail-item p {
+      color: #000000;
+      font-weight: 600;
     }
     
     .tags {
@@ -653,7 +675,7 @@
         <h1>김혜미</h1>
         <p class="title">AI & Web Developer</p>
         <p class="bio">
-          AI와 웹 개발의 세계를 탐험하는 개발자
+          Hello World! 설렘을 안고 시작하는 1레벨 개발자
         </p>
       </div>
       
@@ -897,13 +919,8 @@
     };
     
     // 저장된 테마 불러오기
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      body.classList.add('light-mode');
-      themeToggle.textContent = '🌙';
-    } else {
-      themeToggle.textContent = '☀️';
-    }
+    let currentTheme = 'dark';
+    themeToggle.textContent = '☀️';
     
     // 테마 전환
     themeToggle.addEventListener('click', () => {
@@ -911,10 +928,10 @@
       
       if (body.classList.contains('light-mode')) {
         themeToggle.textContent = '🌙';
-        localStorage.setItem('theme', 'light');
+        currentTheme = 'light';
       } else {
         themeToggle.textContent = '☀️';
-        localStorage.setItem('theme', 'dark');
+        currentTheme = 'dark';
       }
     });
     
