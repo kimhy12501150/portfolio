@@ -321,6 +321,7 @@
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
     
     .project-card::before {
@@ -331,6 +332,24 @@
       width: 100%;
       height: 4px;
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .project-card::after {
+      content: '클릭하여 진행 과정 보기';
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      right: 0;
+      background: rgba(96, 165, 250, 0.9);
+      color: white;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      transition: bottom 0.3s;
+      text-align: center;
+    }
+    
+    .project-card:hover::after {
+      bottom: 0;
     }
     
     .project-card:hover {
@@ -672,12 +691,12 @@
       <section class="projects-section">
         <h2>💡 학습 계획</h2>
         <div class="projects-grid">
-          <div class="project-card">
+          <div class="project-card" data-project="ai">
             <h3>AI 기초 학습</h3>
             <p>ChatGPT가 어떻게 작동하는지 궁금해서 AI 공부를 시작했어요. Google Teachable Machine으로 이미지 분류 AI를 처음 만들어봤습니다!</p>
             <span class="project-status">학습 중</span>
           </div>
-          <div class="project-card">
+          <div class="project-card" data-project="web">
             <h3>웹 개발 실습</h3>
             <p>유튜브 따라하기로 첫 웹페이지를 만들었어요. 내가 좋아하는 것들을 소개하는 페이지를 직접 디자인하고 있습니다!</p>
             <span class="project-status">학습 중</span>
@@ -707,6 +726,7 @@
     const modal = document.getElementById('skillModal');
     const closeModal = document.getElementById('closeModal');
     const skillCards = document.querySelectorAll('.skill-card');
+    const projectCards = document.querySelectorAll('.project-card');
     
     // Modal data
     const skillData = {
@@ -808,6 +828,74 @@
       }
     };
     
+    // Project data
+    const projectData = {
+      ai: {
+        icon: '🤖',
+        title: 'AI 기초 학습',
+        description: 'ChatGPT를 사용하다가 "이게 어떻게 작동하는 거지?"라는 궁금증에서 시작했어요. AI의 원리를 하나씩 배워가고 있습니다!',
+        sections: [
+          {
+            title: '✅ 완료한 것들',
+            items: [
+              { title: 'Google Teachable Machine', desc: '손 제스처를 인식하는 AI 모델을 직접 만들어봤어요. 코딩 없이도 AI를 체험할 수 있어서 신기했어요!' },
+              { title: 'AI 기초 강의 수강', desc: '유튜브에서 AI 입문 강의를 듣고 기본 개념을 이해했습니다.' },
+              { title: 'Colab 첫 실행', desc: 'Google Colab에서 간단한 예제 코드를 실행해봤어요. Python으로 AI를 다루는 첫 경험이었습니다!' }
+            ]
+          },
+          {
+            title: '📝 진행 중',
+            items: [
+              { title: 'Python 기초 다지기', desc: 'AI를 제대로 배우려면 Python이 필수라고 해서 열심히 공부하고 있어요.' },
+              { title: '데이터 분류 실습', desc: '간단한 데이터를 분류하는 AI 모델을 만들어보고 있습니다.' },
+              { title: 'AI 뉴스 스크랩', desc: 'ChatGPT, Gemini 같은 최신 AI 소식을 모아서 읽고 있어요.' }
+            ]
+          },
+          {
+            title: '⏰ 앞으로 할 것',
+            items: [
+              { title: '이미지 분류 AI', desc: '고양이와 강아지 사진을 구분하는 AI를 직접 만들어보고 싶어요!' },
+              { title: '간단한 챗봇', desc: '질문에 답하는 간단한 챗봇 프로그램을 만들어볼 계획입니다.' },
+              { title: 'Kaggle 도전', desc: '실력이 쌓이면 Kaggle의 초보자 대회에 참가해보고 싶어요.' }
+            ]
+          }
+        ],
+        tags: ['Google Colab', 'Teachable Machine', 'Python', 'AI 뉴스', '이미지 분류']
+      },
+      web: {
+        icon: '💻',
+        title: '웹 개발 실습',
+        description: '멋진 웹사이트를 보면서 "나도 저런 거 만들고 싶다!"는 생각에서 시작했어요. 하나씩 배워가며 나만의 웹페이지를 만들고 있습니다!',
+        sections: [
+          {
+            title: '✅ 완료한 것들',
+            items: [
+              { title: 'HTML/CSS 기초', desc: '태그, 선택자, 레이아웃 등 웹의 기본을 배웠어요. 처음엔 어려웠지만 점점 재밌어지고 있어요!' },
+              { title: '자기소개 페이지', desc: '바로 이 포트폴리오 페이지예요! 직접 디자인하고 코딩했습니다. 뿌듯해요! 😊' },
+              { title: '애니메이션 효과', desc: '버튼에 호버 효과와 간단한 애니메이션을 넣어봤어요. 움직이는 걸 보니 신기했어요!' }
+            ]
+          },
+          {
+            title: '📝 진행 중',
+            items: [
+              { title: 'JavaScript 학습', desc: '웹페이지에 동적인 기능을 추가하는 방법을 배우고 있어요. 클릭하면 반응하는 게 신기해요!' },
+              { title: 'To-Do List 앱', desc: '할 일을 추가하고 삭제할 수 있는 간단한 앱을 만들고 있습니다.' },
+              { title: '반응형 디자인', desc: '컴퓨터, 태블릿, 핸드폰 모두에서 예쁘게 보이도록 연습 중이에요.' }
+            ]
+          },
+          {
+            title: '⏰ 앞으로 할 것',
+            items: [
+              { title: '취미 소개 페이지', desc: '좋아하는 음악, 영화, 책을 소개하는 나만의 추천 페이지를 만들 거예요!' },
+              { title: '미니 게임', desc: '가위바위보나 숫자 맞추기 같은 간단한 게임을 만들어보고 싶어요.' },
+              { title: 'GitHub Pages 배포', desc: '완성한 웹사이트를 인터넷에 올려서 친구들에게 자랑하고 싶어요!' }
+            ]
+          }
+        ],
+        tags: ['HTML', 'CSS', 'JavaScript', 'CodePen', 'VS Code', 'GitHub']
+      }
+    };
+    
     // 저장된 테마 불러오기
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
@@ -830,46 +918,53 @@
       }
     });
     
+    // Open modal function
+    function openModal(data) {
+      document.getElementById('modalIcon').textContent = data.icon;
+      document.getElementById('modalTitle').textContent = data.title;
+      
+      let bodyHTML = `<p>${data.description}</p>`;
+      
+      data.sections.forEach(section => {
+        bodyHTML += `<div class="detail-section"><h3>${section.title}</h3>`;
+        
+        section.items.forEach(item => {
+          bodyHTML += `
+            <div class="detail-item">
+              <h4>${item.title}</h4>
+              <p>${item.desc}</p>
+            </div>
+          `;
+        });
+        
+        bodyHTML += `</div>`;
+      });
+      
+      bodyHTML += `<div class="tags">`;
+      data.tags.forEach(tag => {
+        bodyHTML += `<span class="tag">${tag}</span>`;
+      });
+      bodyHTML += `</div>`;
+      
+      document.getElementById('modalBody').innerHTML = bodyHTML;
+      modal.classList.add('active');
+    }
+    
     // Skill card click event
     skillCards.forEach(card => {
       card.addEventListener('click', () => {
         const skillType = card.getAttribute('data-skill');
         const data = skillData[skillType];
-        
-        // Update modal content
-        document.getElementById('modalIcon').textContent = data.icon;
-        document.getElementById('modalTitle').textContent = data.title;
-        
-        let bodyHTML = `<p>${data.description}</p>`;
-        
-        data.sections.forEach(section => {
-          bodyHTML += `
-            <div class="detail-section">
-              <h3>${section.title}</h3>
-          `;
-          
-          section.items.forEach(item => {
-            bodyHTML += `
-              <div class="detail-item">
-                <h4>${item.title}</h4>
-                <p>${item.desc}</p>
-              </div>
-            `;
-          });
-          
-          bodyHTML += `</div>`;
-        });
-        
-        bodyHTML += `<div class="tags">`;
-        data.tags.forEach(tag => {
-          bodyHTML += `<span class="tag">${tag}</span>`;
-        });
-        bodyHTML += `</div>`;
-        
-        document.getElementById('modalBody').innerHTML = bodyHTML;
-        
-        // Show modal
-        modal.classList.add('active');
+        openModal(data);
+      });
+    });
+    
+    // Project card click event
+    projectCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const projectType = card.getAttribute('data-project');
+        const data = projectData[projectType];
+        openModal(data);
       });
     });
     
