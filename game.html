@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가위바위보 게임</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .game-container {
+      background: white;
+      border-radius: 30px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      color: #667eea;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 1rem;
+    }
+    
+    .score-board {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      color: white;
+    }
+    
+    .score-item {
+      text-align: center;
+    }
+    
+    .score-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+    }
+    
+    .score-value {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    .game-area {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
+    }
+    
+    .player-choice, .computer-choice {
+      text-align: center;
+    }
+    
+    .choice-icon {
+      width: 120px;
+      height: 120px;
+      background: #f0f0f0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .choice-icon.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .choice-label {
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 600;
+    }
+    
+    .vs {
+      font-size: 2rem;
+      color: #667eea;
+      font-weight: bold;
+    }
+    
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .choice-btn {
+      background: white;
+      border: 3px solid #667eea;
+      border-radius: 20px;
+      padding: 1.5rem 1rem;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .choice-btn:hover {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .choice-btn span {
+      font-size: 0.9rem;
+      color: #667eea;
+      font-weight: 600;
+    }
+    
+    .choice-btn:hover span {
+      color: white;
+    }
+    
+    .result {
+      text-align: center;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    
+    .result.win {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: #00695c;
+    }
+    
+    .result.lose {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: #c62828;
+    }
+    
+    .result.draw {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      color: #6a1b9a;
+    }
+    
+    .reset-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .reset-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .reset-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 600px) {
+      .game-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .choice-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+      }
+      
+      .vs {
+        font-size: 1.5rem;
+      }
+      
+      .buttons {
+        gap: 0.5rem;
+      }
+      
+      .choice-btn {
+        padding: 1rem 0.5rem;
+        font-size: 2rem;
+      }
+      
+      .choice-btn span {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1>✊✋✌️ 가위바위보</h1>
+      <p>컴퓨터와 대결해보세요!</p>
+    </div>
+    
+    <div class="score-board">
+      <div class="score-item">
+        <div class="score-label">나의 승리</div>
+        <div class="score-value" id="playerScore">0</div>
+      </div>
+      <div class="score-item">
+        <div class="score-label">무승부</div>
+        <div class="score-value" id="drawScore">0</div>
+      </div>
+      <div class="score-item">
+        <div class="score-label">컴퓨터 승리</div>
+        <div class="score-value" id="computerScore">0</div>
+      </div>
+    </div>
+    
+    <div class="game-area">
+      <div class="player-choice">
+        <div class="choice-icon" id="playerIcon">❓</div>
+        <div class="choice-label">나의 선택</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="computer-choice">
+        <div class="choice-icon" id="computerIcon">❓</div>
+        <div class="choice-label">컴퓨터</div>
+      </div>
+    </div>
+    
+    <div class="buttons">
+      <button class="choice-btn" onclick="play('가위')">
+        ✌️
+        <span>가위</span>
+      </button>
+      <button class="choice-btn" onclick="play('바위')">
+        ✊
+        <span>바위</span>
+      </button>
+      <button class="choice-btn" onclick="play('보')">
+        ✋
+        <span>보</span>
+      </button>
+    </div>
+    
+    <div class="result" id="result">
+      버튼을 클릭하여 게임을 시작하세요!
+    </div>
+    
+    <button class="reset-btn" onclick="reset()">🔄 점수 초기화</button>
+  </div>
+  
+  <script>
+    let playerScore = 0;
+    let computerScore = 0;
+    let drawScore = 0;
+    
+    const choices = ['가위', '바위', '보'];
+    const icons = {
+      '가위': '✌️',
+      '바위': '✊',
+      '보': '✋'
+    };
+    
+    function play(playerChoice) {
+      const computerChoice = choices[Math.floor(Math.random() * 3)];
+      
+      // 아이콘 업데이트
+      document.getElementById('playerIcon').textContent = icons[playerChoice];
+      document.getElementById('computerIcon').textContent = icons[computerChoice];
+      
+      // 아이콘 활성화 효과
+      document.getElementById('playerIcon').classList.add('active');
+      document.getElementById('computerIcon').classList.add('active');
+      
+      setTimeout(() => {
+        document.getElementById('playerIcon').classList.remove('active');
+        document.getElementById('computerIcon').classList.remove('active');
+      }, 500);
+      
+      // 결과 판정
+      const result = getResult(playerChoice, computerChoice);
+      const resultElement = document.getElementById('result');
+      
+      resultElement.classList.remove('win', 'lose', 'draw');
+      
+      if (result === 'win') {
+        playerScore++;
+        resultElement.textContent = `🎉 당신이 이겼습니다! ${playerChoice}가 ${computerChoice}를 이깁니다!`;
+        resultElement.classList.add('win');
+      } else if (result === 'lose') {
+        computerScore++;
+        resultElement.textContent = `😢 컴퓨터가 이겼습니다! ${computerChoice}가 ${playerChoice}를 이깁니다!`;
+        resultElement.classList.add('lose');
+      } else {
+        drawScore++;
+        resultElement.textContent = `🤝 무승부입니다! 둘 다 ${playerChoice}를 냈어요!`;
+        resultElement.classList.add('draw');
+      }
+      
+      // 점수 업데이트
+      document.getElementById('playerScore').textContent = playerScore;
+      document.getElementById('computerScore').textContent = computerScore;
+      document.getElementById('drawScore').textContent = drawScore;
+    }
+    
+    function getResult(player, computer) {
+      if (player === computer) return 'draw';
+      
+      if (
+        (player === '가위' && computer === '보') ||
+        (player === '바위' && computer === '가위') ||
+        (player === '보' && computer === '바위')
+      ) {
+        return 'win';
+      }
+      
+      return 'lose';
+    }
+    
+    function reset() {
+      playerScore = 0;
+      computerScore = 0;
+      drawScore = 0;
+      
+      document.getElementById('playerScore').textContent = 0;
+      document.getElementById('computerScore').textContent = 0;
+      document.getElementById('drawScore').textContent = 0;
+      
+      document.getElementById('playerIcon').textContent = '❓';
+      document.getElementById('computerIcon').textContent = '❓';
+      
+      const resultElement = document.getElementById('result');
+      resultElement.textContent = '점수가 초기화되었습니다!';
+      resultElement.classList.remove('win', 'lose', 'draw');
+      
+      setTimeout(() => {
+        resultElement.textContent = '버튼을 클릭하여 게임을 시작하세요!';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
