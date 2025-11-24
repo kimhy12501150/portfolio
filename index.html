@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>김혜미의 포트폴리오</title>
+  <title>김혜미의 포트폴리오.</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -395,6 +395,104 @@
       border: 1px solid rgba(96, 165, 250, 0.5);
     }
     
+    /* Mini Projects */
+    .mini-project-card {
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    
+    .mini-project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .mini-project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.5) 0%, rgba(30, 58, 138, 0.5) 100%);
+    }
+    
+    .project-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .mini-project-card h3 {
+      color: #60a5fa;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .mini-project-card p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .project-tags {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .mini-tag {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      padding: 0.4rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    .play-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .play-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    }
+    
+    body.light-mode .mini-project-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    body.light-mode .mini-project-card h3 {
+      color: #1e40af;
+      font-weight: 700;
+    }
+    
+    body.light-mode .mini-project-card p {
+      color: #1e293b;
+      font-weight: 500;
+    }
+    
     /* Modal Styles */
     .modal {
       display: none;
@@ -675,7 +773,7 @@
         <h1>김혜미</h1>
         <p class="title">AI & Web Developer</p>
         <p class="bio">
-          Hello World! 설렘을 안고 시작하는 1레벨 개발자
+          AI와 웹 개발의 세계를 탐험하는 개발자
         </p>
       </div>
       
@@ -722,6 +820,24 @@
             <h3>웹 개발 실습</h3>
             <p>유튜브 따라하기로 첫 웹페이지를 만들었어요. 내가 좋아하는 것들을 소개하는 페이지를 직접 디자인하고 있습니다!</p>
             <span class="project-status">학습 중</span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Mini Projects Section -->
+      <section class="projects-section">
+        <h2>🎮 미니 프로젝트</h2>
+        <div class="projects-grid">
+          <div class="mini-project-card">
+            <div class="project-icon">✌️✊✋</div>
+            <h3>가위바위보 게임</h3>
+            <p>JavaScript로 만든 첫 번째 미니 게임이에요! 컴퓨터와 가위바위보 대결을 하고 점수를 기록할 수 있어요.</p>
+            <div class="project-tags">
+              <span class="mini-tag">HTML</span>
+              <span class="mini-tag">CSS</span>
+              <span class="mini-tag">JavaScript</span>
+            </div>
+            <a href="game.html" target="_blank" class="play-btn">🎮 게임 플레이하기</a>
           </div>
         </div>
       </section>
