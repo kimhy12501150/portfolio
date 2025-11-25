@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>데이터 시각화 대시보드</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .card-title {
+      font-size: 1.3rem;
+      color: #333;
+      font-weight: 700;
+    }
+    
+    .card-icon {
+      font-size: 2rem;
+    }
+    
+    .stat-value {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .chart-card {
+      grid-column: span 2;
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .chart-container {
+      height: 300px;
+      position: relative;
+      margin-top: 2rem;
+    }
+    
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      height: 100%;
+      gap: 1rem;
+    }
+    
+    .bar {
+      flex: 1;
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px 10px 0 0;
+      position: relative;
+      transition: all 0.3s;
+      cursor: pointer;
+      min-height: 20px;
+    }
+    
+    .bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.05);
+    }
+    
+    .bar-label {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.85rem;
+      color: #666;
+      white-space: nowrap;
+    }
+    
+    .bar-value {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 600;
+      color: #667eea;
+      font-size: 0.9rem;
+    }
+    
+    .line-chart {
+      height: 100%;
+      position: relative;
+    }
+    
+    .line-chart svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .prediction-box {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-top: 2rem;
+      border-left: 4px solid #667eea;
+    }
+    
+    .prediction-box h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .prediction-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .prediction-item:last-child {
+      border-bottom: none;
+    }
+    
+    .trend-up {
+      color: #10b981;
+      font-weight: 600;
+    }
+    
+    .trend-down {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    
+    .info-section {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      margin-top: 2rem;
+    }
+    
+    .info-section h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+    
+    .info-section p {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    
+    .data-source {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    
+    @media (max-width: 968px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .chart-card {
+        grid-column: span 1;
+      }
+      
+      .stat-value {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 데이터 시각화 대시보드</h1>
+      <p>실제 데이터를 분석하고 시각화한 프로젝트예요</p>
+    </div>
+    
+    <!-- 통계 카드들 -->
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">총 데이터</div>
+          <div class="card-icon">📈</div>
+        </div>
+        <div class="stat-value">1,247</div>
+        <div class="stat-label">분석된 데이터 포인트</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">평균 값</div>
+          <div class="card-icon">📊</div>
+        </div>
+        <div class="stat-value">67.3</div>
+        <div class="stat-label">전체 평균</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">증가율</div>
+          <div class="card-icon">🚀</div>
+        </div>
+        <div class="stat-value">+24%</div>
+        <div class="stat-label">지난 달 대비</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">최고 기록</div>
+          <div class="card-icon">⭐</div>
+        </div>
+        <div class="stat-value">98.5</div>
+        <div class="stat-label">역대 최고치</div>
+      </div>
+    </div>
+    
+    <!-- 막대 그래프 -->
+    <div class="chart-card">
+      <div class="card-header">
+        <div class="card-title">월별 데이터 추이</div>
+        <div class="card-icon">📊</div>
+      </div>
+      <div class="chart-container">
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+    </div>
+    
+    <!-- 선 그래프 -->
+    <div class="chart-card">
+      <div class="card-header">
+        <div class="card-title">성장 추세 분석</div>
+        <div class="card-icon">📈</div>
+      </div>
+      <div class="chart-container">
+        <div class="line-chart">
+          <svg id="lineChart" viewBox="0 0 800 300"></svg>
+        </div>
+      </div>
+      
+      <div class="prediction-box">
+        <h3>🔮 AI 예측 결과</h3>
+        <div class="prediction-item">
+          <span>다음 달 예상치</span>
+          <span class="trend-up">↑ 72.4 (+8%)</span>
+        </div>
+        <div class="prediction-item">
+          <span>3개월 후 예상치</span>
+          <span class="trend-up">↑ 81.2 (+21%)</span>
+        </div>
+        <div class="prediction-item">
+          <span>성장 지속 가능성</span>
+          <span class="trend-up">높음 (87%)</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 정보 섹션 -->
+    <div class="info-section">
+      <h2>💡 분석 방법</h2>
+      <p>
+        이 대시보드는 가상의 학습 데이터를 사용하여 데이터 분석과 시각화 과정을 보여줍니다. 
+        실제 프로젝트에서는 Python의 Pandas로 데이터를 전처리하고, Matplotlib으로 시각화하며, 
+        간단한 선형 회귀 모델을 사용하여 미래 값을 예측합니다.
+      </p>
+      <p>
+        <strong>사용한 기술:</strong> 데이터 수집 → 전처리 (결측치 처리, 이상치 제거) → 
+        탐색적 데이터 분석(EDA) → 시각화 → 트렌드 분석 → 예측 모델링
+      </p>
+      <div class="data-source">
+        📌 <strong>학습 목표:</strong> 데이터에서 의미있는 패턴을 찾고, 
+        그래프로 직관적으로 표현하며, 간단한 예측 모델을 만드는 과정을 경험했습니다.
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 월별 데이터
+    const monthlyData = [
+      { month: '1월', value: 45 },
+      { month: '2월', value: 52 },
+      { month: '3월', value: 48 },
+      { month: '4월', value: 61 },
+      { month: '5월', value: 58 },
+      { month: '6월', value: 67 },
+      { month: '7월', value: 73 },
+      { month: '8월', value: 69 },
+      { month: '9월', value: 78 },
+      { month: '10월', value: 82 },
+      { month: '11월', value: 76 },
+      { month: '12월', value: 85 }
+    ];
+    
+    // 막대 그래프 생성
+    const barChart = document.getElementById('barChart');
+    const maxValue = Math.max(...monthlyData.map(d => d.value));
+    
+    monthlyData.forEach(data => {
+      const barContainer = document.createElement('div');
+      barContainer.style.flex = '1';
+      barContainer.style.position = 'relative';
+      barContainer.style.display = 'flex';
+      barContainer.style.alignItems = 'flex-end';
+      barContainer.style.height = '100%';
+      
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = `${(data.value / maxValue) * 100}%`;
+      
+      const value = document.createElement('div');
+      value.className = 'bar-value';
+      value.textContent = data.value;
+      bar.appendChild(value);
+      
+      const label = document.createElement('div');
+      label.className = 'bar-label';
+      label.textContent = data.month;
+      bar.appendChild(label);
+      
+      barContainer.appendChild(bar);
+      barChart.appendChild(barContainer);
+    });
+    
+    // 선 그래프 생성
+    const lineChart = document.getElementById('lineChart');
+    const width = 800;
+    const height = 300;
+    const padding = 40;
+    
+    const xScale = (width - padding * 2) / (monthlyData.length - 1);
+    const yScale = (height - padding * 2) / maxValue;
+    
+    // 격자선
+    for (let i = 0; i <= 5; i++) {
+      const y = height - padding - (i * (height - padding * 2) / 5);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', padding);
+      line.setAttribute('y1', y);
+      line.setAttribute('x2', width - padding);
+      line.setAttribute('y2', y);
+      line.setAttribute('stroke', '#e0e0e0');
+      line.setAttribute('stroke-width', '1');
+      lineChart.appendChild(line);
+    }
+    
+    // 선 그리기
+    let pathData = '';
+    monthlyData.forEach((data, index) => {
+      const x = padding + index * xScale;
+      const y = height - padding - data.value * yScale;
+      
+      if (index === 0) {
+        pathData += `M ${x} ${y}`;
+      } else {
+        pathData += ` L ${x} ${y}`;
+      }
+      
+      // 점 그리기
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', x);
+      circle.setAttribute('cy', y);
+      circle.setAttribute('r', '6');
+      circle.setAttribute('fill', '#667eea');
+      circle.style.cursor = 'pointer';
+      
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = `${data.month}: ${data.value}`;
+      circle.appendChild(title);
+      
+      lineChart.appendChild(circle);
+    });
+    
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathData);
+    path.setAttribute('stroke', '#667eea');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    lineChart.insertBefore(path, lineChart.firstChild);
+    
+    // 그라데이션 영역
+    const areaPath = pathData + ` L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`;
+    const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    area.setAttribute('d', areaPath);
+    area.setAttribute('fill', 'url(#gradient)');
+    area.setAttribute('opacity', '0.3');
+    
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'gradient');
+    gradient.setAttribute('x1', '0%');
+    gradient.setAttribute('y1', '0%');
+    gradient.setAttribute('x2', '0%');
+    gradient.setAttribute('y2', '100%');
+    
+    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', '#667eea');
+    
+    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', '#764ba2');
+    
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    defs.appendChild(gradient);
+    lineChart.insertBefore(defs, lineChart.firstChild);
+    lineChart.insertBefore(area, lineChart.firstChild.nextSibling);
+  </script>
+</body>
+</html>

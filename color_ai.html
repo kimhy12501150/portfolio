@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 색상 추천</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 25px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card h2 {
+      color: #667eea;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .color-option {
+      aspect-ratio: 1;
+      border-radius: 15px;
+      cursor: pointer;
+      border: 4px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .color-option:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .color-option.selected {
+      border-color: white;
+      box-shadow: 0 0 0 4px #667eea;
+      transform: scale(1.05);
+    }
+    
+    .color-option.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .generate-btn {
+      width: 100%;
+      padding: 1.2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 1.5rem;
+    }
+    
+    .generate-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .selected-colors {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .selected-color-chip {
+      padding: 0.8rem 1.5rem;
+      border-radius: 20px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .result-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .palette-item {
+      text-align: center;
+    }
+    
+    .palette-color {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .palette-color:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .palette-label {
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+    
+    .palette-hex {
+      font-family: monospace;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .info-box {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-top: 2rem;
+      border-left: 4px solid #667eea;
+    }
+    
+    .info-box h3 {
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+    
+    .info-box p {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 968px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .color-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 AI 색상 추천</h1>
+      <p>좋아하는 색을 선택하면 AI가 완벽한 조합을 추천해드려요!</p>
+    </div>
+    
+    <div class="main-content">
+      <!-- 왼쪽: 색상 선택 -->
+      <div class="card">
+        <h2>🎯 좋아하는 색을 선택하세요</h2>
+        <div class="color-grid" id="colorGrid"></div>
+        
+        <button class="generate-btn" id="generateBtn" disabled>
+          ✨ AI 추천 받기
+        </button>
+        
+        <div id="selectedContainer"></div>
+        
+        <div class="info-box">
+          <h3>💡 작동 원리</h3>
+          <p>선택한 색상을 분석하여 색채 이론(보색, 유사색, 3색 조화)을 기반으로 AI가 가장 어울리는 색 조합을 계산합니다.</p>
+        </div>
+      </div>
+      
+      <!-- 오른쪽: 추천 결과 -->
+      <div class="card">
+        <h2>🌈 AI 추천 팔레트</h2>
+        <div id="resultContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon">🎨</div>
+            <p>왼쪽에서 색을 선택하고<br>AI 추천 버튼을 눌러주세요!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const colors = [
+      { name: '빨강', hex: '#FF6B6B' },
+      { name: '주황', hex: '#FFA06B' },
+      { name: '노랑', hex: '#FFD93D' },
+      { name: '연두', hex: '#95E1D3' },
+      { name: '초록', hex: '#38B000' },
+      { name: '청록', hex: '#4ECDC4' },
+      { name: '하늘', hex: '#6BCFFF' },
+      { name: '파랑', hex: '#4A90E2' },
+      { name: '남색', hex: '#5F4B8B' },
+      { name: '보라', hex: '#A06BB4' },
+      { name: '분홍', hex: '#FFB6D9' },
+      { name: '갈색', hex: '#8B6914' }
+    ];
+    
+    let selectedColors = [];
+    
+    // 색상 그리드 생성
+    const colorGrid = document.getElementById('colorGrid');
+    colors.forEach((color, index) => {
+      const div = document.createElement('div');
+      div.className = 'color-option';
+      div.style.backgroundColor = color.hex;
+      div.title = color.name;
+      div.onclick = () => toggleColor(index);
+      colorGrid.appendChild(div);
+    });
+    
+    function toggleColor(index) {
+      const colorOptions = document.querySelectorAll('.color-option');
+      const color = colors[index];
+      
+      if (selectedColors.includes(index)) {
+        selectedColors = selectedColors.filter(i => i !== index);
+        colorOptions[index].classList.remove('selected');
+      } else {
+        if (selectedColors.length < 3) {
+          selectedColors.push(index);
+          colorOptions[index].classList.add('selected');
+        }
+      }
+      
+      updateSelectedDisplay();
+      document.getElementById('generateBtn').disabled = selectedColors.length === 0;
+    }
+    
+    function updateSelectedDisplay() {
+      const container = document.getElementById('selectedContainer');
+      if (selectedColors.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+      
+      let html = '<div style="margin-top: 1rem;"><strong>선택한 색상:</strong></div><div class="selected-colors">';
+      selectedColors.forEach(index => {
+        const color = colors[index];
+        html += `<div class="selected-color-chip" style="background-color: ${color.hex}">${color.name}</div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+    
+    document.getElementById('generateBtn').onclick = generatePalette;
+    
+    function generatePalette() {
+      if (selectedColors.length === 0) return;
+      
+      const baseColor = colors[selectedColors[0]].hex;
+      const recommendations = [];
+      
+      // 1. 보색 (Complementary)
+      recommendations.push({
+        label: '보색 조화',
+        color: getComplementary(baseColor),
+        desc: '대비되는 색'
+      });
+      
+      // 2. 유사색 (Analogous)
+      const analogous = getAnalogous(baseColor);
+      recommendations.push({
+        label: '유사색 1',
+        color: analogous[0],
+        desc: '비슷한 느낌'
+      });
+      recommendations.push({
+        label: '유사색 2',
+        color: analogous[1],
+        desc: '조화로운 색'
+      });
+      
+      // 3. 3색 조화 (Triadic)
+      const triadic = getTriadic(baseColor);
+      recommendations.push({
+        label: '3색 조화',
+        color: triadic,
+        desc: '균형잡힌 색'
+      });
+      
+      displayResults(recommendations);
+    }
+    
+    function displayResults(recommendations) {
+      const container = document.getElementById('resultContainer');
+      let html = '<div class="result-palette">';
+      
+      recommendations.forEach(rec => {
+        html += `
+          <div class="palette-item">
+            <div class="palette-color" style="background-color: ${rec.color}"></div>
+            <div class="palette-label">${rec.label}</div>
+            <div class="palette-hex">${rec.color}</div>
+            <div style="color: #999; font-size: 0.85rem; margin-top: 0.5rem;">${rec.desc}</div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+    
+    // 색상 변환 함수들
+    function hexToHSL(hex) {
+      const r = parseInt(hex.slice(1, 3), 16) / 255;
+      const g = parseInt(hex.slice(3, 5), 16) / 255;
+      const b = parseInt(hex.slice(5, 7), 16) / 255;
+      
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+      
+      return [h * 360, s * 100, l * 100];
+    }
+    
+    function HSLToHex(h, s, l) {
+      s /= 100;
+      l /= 100;
+      
+      const c = (1 - Math.abs(2 * l - 1)) * s;
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+      const m = l - c / 2;
+      let r = 0, g = 0, b = 0;
+      
+      if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+      else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+      else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+      else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+      else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+      else if (300 <= h && h < 360) { r = c; g = 0; b = x; }
+      
+      r = Math.round((r + m) * 255);
+      g = Math.round((g + m) * 255);
+      b = Math.round((b + m) * 255);
+      
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+    
+    function getComplementary(hex) {
+      const [h, s, l] = hexToHSL(hex);
+      const newH = (h + 180) % 360;
+      return HSLToHex(newH, s, l);
+    }
+    
+    function getAnalogous(hex) {
+      const [h, s, l] = hexToHSL(hex);
+      return [
+        HSLToHex((h + 30) % 360, s, l),
+        HSLToHex((h - 30 + 360) % 360, s, l)
+      ];
+    }
+    
+    function getTriadic(hex) {
+      const [h, s, l] = hexToHSL(hex);
+      return HSLToHex((h + 120) % 360, s, l);
+    }
+  </script>
+</body>
+</html>
