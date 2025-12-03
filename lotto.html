@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍬 행운의 캔디 로또</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #ffe6fa;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --primary: #ff8fab;
+      --secondary: #8ac6d1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Jua', sans-serif; /* 귀여운 폰트 적용 */
+    }
+    
+    body {
+      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 배경에 떠다니는 구름 애니메이션 */
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: floatCloud 20s infinite linear;
+      z-index: 0;
+    }
+    .cloud::after, .cloud::before {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+    }
+    
+    @keyframes floatCloud {
+      from { transform: translateX(-100vw); }
+      to { transform: translateX(100vw); }
+    }
+
+    .container {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 4px solid #fff;
+      border-radius: 40px;
+      padding: 2.5rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(138, 198, 209, 0.3);
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      color: #ff6b81;
+      text-shadow: 2px 2px 0px #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -1px;
+    }
+
+    .header p {
+      color: #7d8da1;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* 캔디 머신 디스플레이 영역 */
+    .machine-display {
+      background: #fff;
+      border-radius: 30px;
+      border: 8px solid #ffdde1;
+      padding: 2rem 1rem;
+      margin-bottom: 2rem;
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 10px 20px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lotto-numbers {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+
+    /* 3D 캔디볼 디자인 */
+    .lotto-ball {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      box-shadow: 
+        inset -5px -5px 10px rgba(0,0,0,0.2),
+        inset 5px 5px 10px rgba(255,255,255,0.5),
+        0 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    /* 사탕의 하이라이트 (광택) */
+    .lotto-ball::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 20px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      transform: rotate(-45deg);
+    }
+
+    @keyframes popIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* 색상 테마: 파스텔 톤 */
+    .color-1 { background: radial-gradient(circle at 30% 30%, #ffd93d, #f6c90e); }
+    .color-2 { background: radial-gradient(circle at 30% 30%, #6ff7ff, #48dbfb); }
+    .color-3 { background: radial-gradient(circle at 30% 30%, #ff9ff3, #f368e0); }
+    .color-4 { background: radial-gradient(circle at 30% 30%, #c7ecee, #95afc0); }
+    .color-5 { background: radial-gradient(circle at 30% 30%, #55efc4, #00b894); }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 1.2rem;
+      border: none;
+      border-radius: 20px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.1);
+    }
+
+    .btn:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .btn-generate {
+      background: #ff9ff3;
+      background: linear-gradient(to bottom, #ff9ff3, #f368e0);
+    }
+    
+    .btn-generate:hover { filter: brightness(1.05); }
+
+    .btn-copy {
+      background: #54a0ff;
+      background: linear-gradient(to bottom, #54a0ff, #2e86de);
+    }
+    
+    .btn-copy:disabled {
+      background: #dcdde1;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: translateY(3px);
+    }
+
+    /* 영수증 느낌의 기록창 */
+    .history {
+      background: #fff;
+      background-image: 
+        radial-gradient(#e6e6e6 1px, transparent 1px),
+        radial-gradient(#e6e6e6 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      border-top: 5px dashed #dcdde1;
+      border-radius: 0 0 15px 15px;
+      padding: 1.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+      position: relative;
+      margin-top: -1rem; /* 컨테이너와 겹치게 */
+      z-index: -1;
+      width: 90%;
+      margin-left: 5%;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .history h3 {
+      font-size: 1.1rem;
+      color: #8395a7;
+      margin-bottom: 1rem;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 0.8rem;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      border: 2px solid #f1f2f6;
+    }
+
+    .history-ball {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+      margin-right: 3px;
+    }
+
+    .history-time {
+      font-size: 0.9rem;
+      color: #a4b0be;
+    }
+
+    .toast {
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #2e86de;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(46, 134, 222, 0.4);
+      font-size: 1.1rem;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* 반응형 */
+    @media (max-width: 480px) {
+      .header h1 { font-size: 2rem; }
+      .lotto-ball { width: 45px; height: 45px; font-size: 1.2rem; }
+      .container { padding: 1.5rem; }
+    }
+
+    /* 캔버스 (폭죽 효과용) */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cloud" style="width: 200px; height: 100px; top: 10%; left: 10%;"></div>
+  <div class="cloud" style="width: 150px; height: 80px; top: 30%; left: 70%;"></div>
+  <div class="cloud" style="width: 180px; height: 90px; top: 70%; left: 20%;"></div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="container">
+    <div class="header">
+      <h1>🍭 행운의 캔디</h1>
+      <p>오늘의 달콤한 행운을 뽑아보세요!</p>
+    </div>
+    
+    <div class="machine-display">
+      <div class="lotto-numbers" id="lottoNumbers">
+        <div style="color: #a4b0be; font-size: 1.4rem; animation: pulse 2s infinite;">
+          버튼을 꾹! 눌러주세요 👇
+        </div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="btn btn-generate" id="generateBtn">
+        🍬 캔디 뽑기
+      </button>
+      <button class="btn btn-copy" id="copyBtn" disabled>
+        ✨ 복사하기
+      </button>
+    </div>
+  </div>
+
+  <div class="history">
+    <h3>🧾 나의 행운 기록</h3>
+    <div id="historyList">
+      <p style="color: #ced6e0; text-align: center; font-size:
