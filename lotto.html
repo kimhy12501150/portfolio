@@ -17,7 +17,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Jua', sans-serif; /* 귀여운 폰트 적용 */
+      font-family: 'Jua', sans-serif;
     }
     
     body {
@@ -31,7 +31,7 @@
       position: relative;
     }
 
-    /* 배경에 떠다니는 구름 애니메이션 */
+    /* 구름 애니메이션 */
     .cloud {
       position: absolute;
       background: white;
@@ -80,7 +80,6 @@
       margin-bottom: 2rem;
     }
 
-    /* 캔디 머신 디스플레이 영역 */
     .machine-display {
       background: #fff;
       border-radius: 30px;
@@ -104,7 +103,6 @@
       z-index: 2;
     }
 
-    /* 3D 캔디볼 디자인 */
     .lotto-ball {
       width: 60px;
       height: 60px;
@@ -125,7 +123,6 @@
       transform: scale(0);
     }
 
-    /* 사탕의 하이라이트 (광택) */
     .lotto-ball::after {
       content: '';
       position: absolute;
@@ -143,12 +140,12 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* 색상 테마: 파스텔 톤 */
-    .color-1 { background: radial-gradient(circle at 30% 30%, #ffd93d, #f6c90e); }
-    .color-2 { background: radial-gradient(circle at 30% 30%, #6ff7ff, #48dbfb); }
-    .color-3 { background: radial-gradient(circle at 30% 30%, #ff9ff3, #f368e0); }
-    .color-4 { background: radial-gradient(circle at 30% 30%, #c7ecee, #95afc0); }
-    .color-5 { background: radial-gradient(circle at 30% 30%, #55efc4, #00b894); }
+    /* 로또 번호별 색상 (10단위) */
+    .color-1 { background: radial-gradient(circle at 30% 30%, #ffd93d, #f6c90e); } /* 1~10: 노랑 */
+    .color-2 { background: radial-gradient(circle at 30% 30%, #6ff7ff, #48dbfb); } /* 11~20: 파랑 */
+    .color-3 { background: radial-gradient(circle at 30% 30%, #ff9ff3, #f368e0); } /* 21~30: 빨강/분홍 */
+    .color-4 { background: radial-gradient(circle at 30% 30%, #c7ecee, #95afc0); } /* 31~40: 회색 */
+    .color-5 { background: radial-gradient(circle at 30% 30%, #55efc4, #00b894); } /* 41~45: 초록 */
 
     .controls {
       display: flex;
@@ -176,14 +173,12 @@
     }
 
     .btn-generate {
-      background: #ff9ff3;
       background: linear-gradient(to bottom, #ff9ff3, #f368e0);
     }
     
     .btn-generate:hover { filter: brightness(1.05); }
 
     .btn-copy {
-      background: #54a0ff;
       background: linear-gradient(to bottom, #54a0ff, #2e86de);
     }
     
@@ -194,7 +189,6 @@
       transform: translateY(3px);
     }
 
-    /* 영수증 느낌의 기록창 */
     .history {
       background: #fff;
       background-image: 
@@ -208,7 +202,7 @@
       max-height: 200px;
       overflow-y: auto;
       position: relative;
-      margin-top: -1rem; /* 컨테이너와 겹치게 */
+      margin-top: -1rem;
       z-index: -1;
       width: 90%;
       margin-left: 5%;
@@ -242,13 +236,15 @@
       font-size: 0.8rem;
       color: white;
       margin-right: 3px;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
     }
 
     .history-time {
       font-size: 0.9rem;
       color: #a4b0be;
     }
-
+    
+    /* 토스트 메시지 스타일 추가 */
     .toast {
       position: fixed;
       top: 2rem;
@@ -262,9 +258,6 @@
       font-size: 1.1rem;
       transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
       opacity: 0;
     }
     
@@ -273,14 +266,12 @@
       opacity: 1;
     }
 
-    /* 반응형 */
     @media (max-width: 480px) {
       .header h1 { font-size: 2rem; }
       .lotto-ball { width: 45px; height: 45px; font-size: 1.2rem; }
       .container { padding: 1.5rem; }
     }
 
-    /* 캔버스 (폭죽 효과용) */
     #confetti-canvas {
       position: fixed;
       top: 0;
@@ -292,76 +283,6 @@
     }
   </style>
 </head>
-
-<script>
-  const generateBtn = document.getElementById("generateBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const lottoNumbers = document.getElementById("lottoNumbers");
-  const historyList = document.getElementById("historyList");
-
-  function getRandomNumbers() {
-    const nums = [];
-    while (nums.length < 6) {
-      const n = Math.floor(Math.random() * 45) + 1;
-      if (!nums.includes(n)) nums.push(n);
-    }
-    return nums.sort((a, b) => a - b);
-  }
-
-  function createBall(number, index) {
-    const ball = document.createElement("div");
-    ball.classList.add("lotto-ball", `color-${(index % 5) + 1}`);
-    ball.textContent = number;
-    return ball;
-  }
-
-  generateBtn.addEventListener("click", () => {
-    lottoNumbers.innerHTML = "";
-    const numbers = getRandomNumbers();
-
-    numbers.forEach((num, idx) => {
-      const ball = createBall(num, idx);
-      lottoNumbers.appendChild(ball);
-    });
-
-    copyBtn.disabled = false;
-
-    const historyItem = document.createElement("div");
-    historyItem.className = "history-item";
-
-    const ballsDiv = document.createElement("div");
-    ballsDiv.style.display = "flex";
-
-    numbers.forEach((num, idx) => {
-      const b = document.createElement("div");
-      b.className = "history-ball";
-      b.style.background = "lightpink";
-      b.textContent = num;
-      ballsDiv.appendChild(b);
-    });
-
-    const timeSpan = document.createElement("span");
-    timeSpan.className = "history-time";
-    timeSpan.textContent = new Date().toLocaleTimeString();
-
-    historyItem.appendChild(ballsDiv);
-    historyItem.appendChild(timeSpan);
-
-    historyList.appendChild(historyItem);
-  });
-
-  copyBtn.addEventListener("click", () => {
-    const nums = Array.from(document.querySelectorAll(".lotto-ball"))
-      .map(el => el.textContent)
-      .join(", ");
-    
-    navigator.clipboard.writeText(nums)
-      .then(() => alert("복사되었습니다!"))
-      .catch(() => alert("복사 실패"));
-  });
-</script>
-
-  
 <body>
 
   <div class="cloud" style="width: 200px; height: 100px; top: 10%; left: 10%;"></div>
@@ -397,5 +318,161 @@
   <div class="history">
     <h3>🧾 나의 행운 기록</h3>
     <div id="historyList">
+      <p style="color: #ced6e0; text-align: center; font-size: 0.9rem;">아직 뽑은 캔디가 없어요</p>
+    </div>
+  </div>
+  
+  <div class="toast" id="toast">✨ 번호가 복사되었어요!</div>
 
-      <p style="color: #ced6e0; text-align: center; font-size:
+  <script>
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const lottoNumbers = document.getElementById("lottoNumbers");
+    const historyList = document.getElementById("historyList");
+    const toast = document.getElementById("toast");
+
+    // 로또 번호 생성
+    function getRandomNumbers() {
+      const nums = [];
+      while (nums.length < 6) {
+        const n = Math.floor(Math.random() * 45) + 1;
+        if (!nums.includes(n)) nums.push(n);
+      }
+      return nums.sort((a, b) => a - b);
+    }
+
+    // 색상 클래스 결정 (로또 규칙: 10번대 단위로 색상 변경)
+    function getColorClass(num) {
+      if (num <= 10) return 'color-1';
+      if (num <= 20) return 'color-2';
+      if (num <= 30) return 'color-3';
+      if (num <= 40) return 'color-4';
+      return 'color-5';
+    }
+
+    // 캔디볼 생성
+    function createBall(number, index) {
+      const ball = document.createElement("div");
+      ball.classList.add("lotto-ball", getColorClass(number)); // 번호에 맞는 색상 적용
+      ball.textContent = number;
+      ball.style.animationDelay = `${index * 0.1}s`; // 순차적 등장 효과
+      return ball;
+    }
+    
+    // 폭죽 효과 관련 변수 및 함수
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particles = [];
+
+    function createConfetti() {
+      for(let i=0; i<80; i++) {
+        particles.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          vx: (Math.random() - 0.5) * 15,
+          vy: (Math.random() - 0.5) * 15,
+          life: 80,
+          color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+          size: Math.random() * 6 + 2
+        });
+      }
+    }
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, index) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.3; // 중력
+        p.life--;
+        p.size *= 0.95;
+        
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        if(p.life <= 0) particles.splice(index, 1);
+      });
+      
+      if(particles.length > 0) requestAnimationFrame(updateConfetti);
+    }
+    
+    // 화면 리사이즈 시 캔버스 크기 조정
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // 버튼 클릭 이벤트
+    generateBtn.addEventListener("click", () => {
+      lottoNumbers.innerHTML = "";
+      const numbers = getRandomNumbers();
+
+      // 번호 표시
+      numbers.forEach((num, idx) => {
+        const ball = createBall(num, idx);
+        lottoNumbers.appendChild(ball);
+      });
+
+      // 버튼 활성화 및 텍스트 변경
+      copyBtn.disabled = false;
+      generateBtn.textContent = '🔄 한 번 더!';
+      
+      // 폭죽 터뜨리기
+      createConfetti();
+      updateConfetti();
+
+      // 기록 추가
+      const historyItem = document.createElement("div");
+      historyItem.className = "history-item";
+
+      const ballsDiv = document.createElement("div");
+      ballsDiv.style.display = "flex";
+
+      numbers.forEach((num) => {
+        const b = document.createElement("div");
+        b.className = `history-ball ${getColorClass(num)}`;
+        b.textContent = num;
+        ballsDiv.appendChild(b);
+      });
+
+      const timeSpan = document.createElement("span");
+      timeSpan.className = "history-time";
+      const now = new Date();
+      timeSpan.textContent = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+      historyItem.appendChild(ballsDiv);
+      historyItem.appendChild(timeSpan);
+
+      // 기록 맨 위에 추가
+      if (historyList.children[0] && historyList.children[0].tagName === 'P') {
+        historyList.innerHTML = ''; // "아직 뽑은 캔디가 없어요" 메시지 삭제
+      }
+      historyList.insertBefore(historyItem, historyList.firstChild);
+      
+      // 기록 5개까지만 유지
+      if (historyList.children.length > 5) {
+        historyList.removeChild(historyList.lastChild);
+      }
+    });
+
+    // 복사하기 버튼 이벤트
+    copyBtn.addEventListener("click", () => {
+      const nums = Array.from(document.querySelectorAll(".lotto-ball"))
+        .map(el => el.textContent)
+        .join(", ");
+      
+      navigator.clipboard.writeText(nums)
+        .then(() => {
+          // 토스트 메시지 표시
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        })
+        .catch(() => alert("복사 실패"));
+    });
+  </script>
+</body>
+</html>
